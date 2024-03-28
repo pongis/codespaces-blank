@@ -1,6 +1,3 @@
-# 
-
-
 from dataclasses import dataclass
 from datetime import date, datetime
 from typing import List
@@ -22,7 +19,11 @@ class Book:
     hardcover: bool
 
     def __eq__(self, other: object) -> bool:
-        # TODO: Vergleich nur auf Basis von Attributen Author und title
+        # Vergleich nur auf Basis von Attributen Author und title
+        pass
+    
+    @classmethod
+    def from_string(cls, author: Author, bookinfo: str):
         pass
 
 class Library:
@@ -32,13 +33,15 @@ class Library:
 
     @property
     def authors(self) -> List[Author]:
-        # TODO: Rückgabe aller einzigartigen Instanzen von Author, was macht eine Instanz von Author einzigartig?
+        # Rückgabe aller einzigartigen Instanzen von Author
         return []
 
     def add_book(self, book: Book) -> None:
         if isinstance(book, Book):
             self.books.append(book)
 
+    def __str__(self) -> str:
+        return '\n'.join([str(book) for book in self.books])
 
 if __name__ == '__main__':
     
@@ -60,17 +63,15 @@ if __name__ == '__main__':
     
     awesome_book = Book(john_doe, "The awesome book", datetime.strptime('12052023', '%d%m%Y').date(), True)
     this_book = Book(max_muster, "Musterbook", published=datetime.strptime('12042011', '%d%m%Y').date(), hardcover=False)
+    # TODO: from_string implementieren
+    that_book = Book.from_string(max_muster, bookinfo="Großes, spannendes Buch;12042021;False")
     
-    # TODO: Muss scheinbar als Buch Instanz angelegt werden 
-    that_book = "Max Muster - Großes, spannendes Buch"
-    
-    # Buecherei
     alexandria = Library()
     alexandria.add_book(boring_book)
     alexandria.add_book(awesome_book)
     alexandria.add_book(this_book)
     alexandria.add_book(that_book)
     
-    
     assert len(alexandria.books) == 4, "Buchanzahl stimmt nicht"
     assert len(alexandria.authors) == 2, "Autorenanzahl stimmt nicht"
+    print(alexandria)
